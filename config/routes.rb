@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   post "sign_in", to: "sessions#create"
   delete "sign_out", to: "sessions#destroy", as: :sign_out
 
-  # Defines the root path route ("/")
-  root "application#index"
+  # Events routes
+  root "events#index"
+  get "events/:event_code", to: "events#show", as: :event
+  post "events/:event_code/purchase", to: "events#purchase", as: :purchase_event
 end
