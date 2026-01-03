@@ -12,6 +12,8 @@ gem "puma", ">= 5.0"
 gem "tailwindcss-rails"
 # Use bcrypt for password hashing
 gem "bcrypt", "~> 3.1.7"
+# HTTP client for external API requests
+gem "faraday", "~> 2.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
@@ -26,5 +28,3 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
-
-
