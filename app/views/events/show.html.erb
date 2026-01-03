@@ -1,0 +1,83 @@
+<div class="w-full max-w-2xl mx-auto">
+  <% if @error %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+      <span class="block sm:inline"><%= @error %></span>
+    </div>
+  <% end %>
+
+  <% if @event.nil? %>
+    <div class="text-center py-12">
+      <p class="text-gray-600 text-lg mb-4">Event not found.</p>
+      <%= link_to "Back to Events", root_path, class: "text-blue-600 hover:text-blue-700" %>
+    </div>
+  <% else %>
+    <% 
+      event_code = @event["eventCode"] || @event[:eventCode]
+      event_date = @event["eventDate"] || @event[:eventDate]
+      price = @event["price"] || @event[:price]
+      seat_code = @event["seatCode"] || @event[:seatCode]
+      quantity = (@event["quantity"] || @event[:quantity]).to_i
+    %>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-md p-8">
+      <div class="flex justify-between items-start mb-6">
+        <h1 class="text-3xl font-bold text-gray-800"><%= event_code %></h1>
+        <% if quantity <= 10 && quantity > 0 %>
+          <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded">
+            Only <%= quantity %> tickets remaining
+          </span>
+        <% elsif quantity == 0 %>
+          <span class="bg-red-100 text-red-800 text-sm font-semibold px-3 py-1 rounded">
+            Sold out
+          </span>
+        <% end %>
+      </div>
+
+      <div class="space-y-4 mb-8">
+        <div>
+          <strong class="text-gray-700">Date & Time:</strong>
+          <p class="text-gray-600"><%= format_event_date(event_date) %></p>
+        </div>
+
+        <div>
+          <strong class="text-gray-700">Price:</strong>
+          <p class="text-gray-600"><%= number_to_currency(price) %></p>
+        </div>
+
+        <% if seat_code && seat_code != "NA" %>
+          <div>
+            <strong class="text-gray-700">Seat Code:</strong>
+            <p class="text-gray-600"><%= seat_code %></p>
+          </div>
+        <% end %>
+
+        <div>
+          <strong class="text-gray-700">Tickets Available:</strong>
+          <p class="text-gray-600"><%= quantity %></p>
+        </div>
+      </div>
+
+      <% if quantity > 0 %>
+        <div class="border-t border-gray-200 pt-6">
+          <h2 class="text-xl font-semibold mb-4">Purchase Ticket</h2>
+          <%= form_with url: purchase_event_path(event_code), method: :post, local: true, class: "space-y-4" do |form| %>
+            <div>
+              <%= form.label :quantity, "Quantity", class: "block text-sm font-medium mb-1" %>
+              <%= form.number_field :quantity, value: 1, min: 1, max: quantity, required: true, 
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+            </div>
+            <div>
+              <%= form.submit "Purchase Ticket", 
+                  class: "w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <%= link_to "← Back to Events", root_path, class: "text-blue-600 hover:text-blue-700" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+

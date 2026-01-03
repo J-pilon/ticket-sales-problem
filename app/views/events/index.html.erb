@@ -1,0 +1,53 @@
+<div class="w-full max-w-6xl mx-auto">
+  <h1 class="text-3xl font-bold mb-8">Upcoming Events</h1>
+
+  <% if @error %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+      <span class="block sm:inline"><%= @error %></span>
+    </div>
+  <% end %>
+
+  <% if @events.empty? %>
+    <div class="text-center py-12">
+      <p class="text-gray-600 text-lg">No events available at this time.</p>
+    </div>
+  <% else %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @events.each do |event| %>
+        <% 
+          event_code = event["eventCode"] || event[:eventCode]
+          event_date = event["eventDate"] || event[:eventDate]
+          price = event["price"] || event[:price]
+          quantity = (event["quantity"] || event[:quantity]).to_i
+        %>
+        <div class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+          <div class="flex justify-between items-start mb-4">
+            <h2 class="text-xl font-semibold text-gray-800"><%= event_code %></h2>
+            <% if quantity <= 10 && quantity > 0 %>
+              <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                Only <%= quantity %> tickets remaining
+              </span>
+            <% elsif quantity == 0 %>
+              <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                Sold out
+              </span>
+            <% end %>
+          </div>
+
+          <div class="space-y-2 mb-4">
+            <p class="text-gray-600">
+              <strong>Date:</strong> <%= format_event_date(event_date) %>
+            </p>
+            <p class="text-gray-600">
+              <strong>Price:</strong> <%= number_to_currency(price) %>
+            </p>
+          </div>
+
+          <%= link_to "View Details", event_path(event_code), 
+              class: "inline-block w-full text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
