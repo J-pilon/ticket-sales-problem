@@ -32,23 +32,23 @@ class EventsController < ApplicationController
     quantity = params[:quantity].to_i
     quantity = 1 if quantity <= 0 # Default to 1 ticket if not specified or invalid
 
-    booking = ExternalTicketBooking.new(base_url: "http://localhost:3001")
-    booking.purchase_ticket(
+    # Enqueue the purchase job to handle the API call asynchronously
+    PurchaseTicketJob.perform_later(
       event_code: event_code,
       event_date: event_date,
       price: price,
-      quantity: quantity
+      quantity: quantity,
+      user_email: current_user.email,
+      base_url: ticket_booking_base_url
     )
 
-    redirect_to event_path(event_code), notice: "Ticket purchased successfully!"
-  rescue ExternalTicketBooking::Error, HttpClient::Error => e
-    redirect_to event_path(params[:event_code]), alert: "Purchase failed: #{e.message}"
+    redirect_to event_path(event_code), notice: "Ticket purchase request has been queued. You will receive confirmation shortly."
   end
 
   private
 
   def fetch_and_sort_events
-    booking = ExternalTicketBooking.new(base_url: "http://localhost:3001")
+    booking = ExternalTicketBooking.new(base_url: ticket_booking_base_url)
     events = booking.get_tickets
 
     # Ensure we have an array
@@ -61,7 +61,7 @@ class EventsController < ApplicationController
   end
 
   def fetch_event_by_code(event_code)
-    booking = ExternalTicketBooking.new(base_url: "http://localhost:3001")
+    booking = ExternalTicketBooking.new(base_url: ticket_booking_base_url)
     events = booking.get_tickets(event_code: event_code)
 
     # Ensure we have an array
@@ -80,5 +80,9 @@ class EventsController < ApplicationController
     Time.parse(date_string.to_s)
   rescue ArgumentError
     Time.current
+  end
+
+  def ticket_booking_base_url
+    ENV.fetch("TICKET_BOOKING_API_URL", "http://localhost:3001")
   end
 end
