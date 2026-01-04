@@ -38,6 +38,7 @@ class EventsController < ApplicationController
       event_date: event_date,
       price: price,
       quantity: quantity,
+      user_email: current_user.email,
       base_url: ticket_booking_base_url
     )
 

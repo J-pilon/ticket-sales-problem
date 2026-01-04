@@ -1,5 +1,17 @@
-<h1>User#confirmation</h1>
+<h1>Ticket Purchase Confirmation</h1>
 
-<p>
-  <%= @greeting %>, find me in app/views/user_mailer/confirmation.html.erb
-</p>
+<p>Thank you for your purchase!</p>
+
+<div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+  <h2 style="margin-top: 0;">Purchase Details</h2>
+  
+  <p><strong>Event Code:</strong> <%= @event_code %></p>
+  <p><strong>Event Date:</strong> <%= format_event_date(@event_date) %></p>
+  <p><strong>Quantity:</strong> <%= @quantity %></p>
+  <p><strong>Price per Ticket:</strong> <%= number_to_currency(@price) %></p>
+  <p><strong>Total Price:</strong> <%= number_to_currency(@total_price) %></p>
+</div>
+
+<p>Your tickets have been successfully purchased. Please save this email for your records.</p>
+
+<p>We look forward to seeing you at the event!</p>

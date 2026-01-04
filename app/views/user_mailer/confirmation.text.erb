@@ -1,3 +1,15 @@
-User#confirmation
+Ticket Purchase Confirmation
 
-<%= @greeting %>, find me in app/views/user_mailer/confirmation.text.erb
+Thank you for your purchase!
+
+Purchase Details:
+------------------
+Event Code: <%= @event_code %>
+Event Date: <%= format_event_date(@event_date) %>
+Quantity: <%= @quantity %>
+Price per Ticket: <%= number_to_currency(@price) %>
+Total Price: <%= number_to_currency(@total_price) %>
+
+Your tickets have been successfully purchased. Please save this email for your records.
+
+We look forward to seeing you at the event!
