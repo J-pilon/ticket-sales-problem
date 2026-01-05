@@ -154,6 +154,10 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.3-aarch64-linux)
+    pg (1.6.3-arm64-darwin)
+    pg (1.6.3-x86_64-darwin)
+    pg (1.6.3-x86_64-linux)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -258,10 +262,6 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (2.8.1)
-      mini_portile2 (~> 2.8.0)
-    sqlite3 (2.8.1-arm64-darwin)
-    sqlite3 (2.8.1-x86_64-darwin)
     stringio (3.2.0)
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
@@ -297,12 +297,12 @@ DEPENDENCIES
   brakeman
   debug
   faraday (~> 2.0)
+  pg (~> 1.6)
   puma (>= 5.0)
   rails (~> 7.2.3)
   rubocop-rails-omakase
   solid_queue (~> 1.2)
   sprockets-rails
-  sqlite3 (>= 1.4)
   tailwindcss-rails
   tzinfo-data
 
