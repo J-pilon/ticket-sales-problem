@@ -8,8 +8,13 @@ default: &default
   port: <%= ENV.fetch("PGPORT", 5432) %>
 
 development:
-  <<: *default
-  database: ticket_sales_problem_development
+  primary:
+    <<: *default
+    database: ticket_sales_problem_development
+  queue:
+    <<: *default
+    database: ticket_sales_problem_development_queue
+    migrations_paths: db/queue_migrate
 
 test:
   <<: *default
@@ -19,14 +24,15 @@ production:
   primary:
     <<: *default
     database: <%= ENV.fetch("DATABASE_NAME", "ticket_sales_problem_production") %>
-    username: <%= ENV["PGUSER"] %>
-    password: <%= ENV["PGPASSWORD"] %>
-    host: <%= ENV["PGHOST"] %>
-    port: <%= ENV["PGPORT"] %>
+    username: <%= ENV.fetch("PGUSER", "Josiah") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    port: <%= ENV.fetch("PGPORT", 5432) %>
   queue:
     <<: *default
     database: <%= ENV.fetch("QUEUE_DATABASE_NAME", "ticket_sales_problem_production_queue") %>
-    username: <%= ENV["PGUSER"] %>
-    password: <%= ENV["PGPASSWORD"] %>
-    host: <%= ENV["PGHOST"] %>
+    username: <%= ENV.fetch("PGUSER", "Josiah") %>
+    password: <%= ENV.fetch("PGPASSWORD", "") %>
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
+    port: <%= ENV.fetch("PGPORT", 5432) %>
     migrations_paths: db/queue_migrate
