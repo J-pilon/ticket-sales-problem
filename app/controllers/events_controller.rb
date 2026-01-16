@@ -26,21 +26,10 @@ class EventsController < ApplicationController
       return
     end
 
-    event_code = @event["eventCode"] || @event[:eventCode]
-    event_date = @event["eventDate"] || @event[:eventDate]
-    price = @event["price"] || @event[:price]
     quantity = params[:quantity].to_i
-    quantity = 1 if quantity <= 0 # Default to 1 ticket if not specified or invalid
+    quantity = 1 if quantity <= 0
 
-    # Enqueue the purchase job to handle the API call asynchronously
-    PurchaseTicketJob.perform_later(
-      event_code: event_code,
-      event_date: event_date,
-      price: price,
-      quantity: quantity,
-      user_email: current_user.email,
-      base_url: ticket_booking_base_url
-    )
+    PurchaseTicket::Service.perform(@event, quantity, current_user)
 
     redirect_to event_path(event_code), notice: "Ticket purchase request has been queued. You will receive confirmation shortly."
   end
