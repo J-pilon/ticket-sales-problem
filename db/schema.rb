@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_03_033920) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_05_031500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "purchase_records", force: :cascade do |t|
+    t.string "event_code", null: false
+    t.string "user_email", null: false
+    t.integer "quantity", default: 1
+    t.decimal "price", precision: 10, scale: 2
+    t.string "status", default: "pending", null: false
+    t.boolean "api_success", default: false
+    t.boolean "email_sent", default: false
+    t.text "error_message"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_purchase_records_on_created_at"
+    t.index ["status"], name: "index_purchase_records_on_status"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email"
