@@ -20,4 +20,7 @@ Rails.application.routes.draw do
   root "events#index"
   get "events/:event_code", to: "events#show", as: :event
   post "events/:event_code/purchase", to: "events#purchase", as: :purchase_event
+
+  # API routes for performance testing
+  get "api/purchase_stats", to: "api#purchase_stats"
 end
